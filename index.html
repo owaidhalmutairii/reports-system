@@ -470,7 +470,6 @@
             items: reportItems,
             createdAt: new Date().toISOString()
         };
-
         // تأخير بسيط لضمان تحميل الصور
         setTimeout(() => {
             let reports = JSON.parse(localStorage.getItem('moh_reports') || '[]');
@@ -485,6 +484,15 @@
             }, 2000);
         }, 500);
     }
+    ;
+        // إرسال إيميل
+        const emailBody = 'تقرير جديد من: ' + report.inspector + '\nالإدارة: ' + report.department + '\nالتاريخ: ' + report.date;
+        
+        const mailtoLink = 'mailto:owaidhalmutairi1@gmail.com?subject=تقرير جديد&body=' + encodeURIComponent(emailBody);
+        window.open(mailtoLink, '_blank');
+
+        // تأخير بسيط لضمان تحميل الصور
+        setTimeout(() => {}, 1000);
 
     function showPageDirect(page) {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
