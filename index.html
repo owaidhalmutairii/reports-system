@@ -390,7 +390,7 @@
         <div class="header">
             <div class="main-title">📋 التقارير اليومية</div>
             <div class="sub-title">فرع وزارة الصحة بحفر الباطن</div>
-            <div class="dept-title">إدارة الخدمات المساندة - لإدارة المساعدة للدعم المساند</div>
+            <div class="dept-title">إدارة الخدمات المساندة - الإدارة المساعدة للدعم المساند</div>
         </div>
 
         <div class="tabs">
@@ -615,19 +615,18 @@
 
         function saveReport(e) {
             e.preventDefault();
-                      // التحقق من أن كل البنود تم اختيارها
-                     const location = document.getElementById('selectedLocation').value;
-                     const items = location === 'inside' ? itemsInside : itemsOutside;
-
-                      for (let i = 1; i <= items.length; i++) {
-                           const checked = document.querySelector(input[name="item${i}"]:checked);
-                           if (!checked) {
-                               alert('⚠️ يرجى الإجابة على جميع البنود! \nالبند رقم ' + i + ' لم يتم اختياره.');
-                               return;
-                           }
-
+            
+            // التحقق من أن كل البنود تم اختيارها
             const location = document.getElementById('selectedLocation').value;
             const items = location === 'inside' ? itemsInside : itemsOutside;
+            for (let i = 1; i <= items.length; i++) {
+                const checked = document.querySelector(`input[name="item${i}"]:checked`);
+                if (!checked) {
+                    alert('⚠️ يرجى الإجابة على جميع البنود! \nالبند رقم ' + i + ' لم يتم اختياره.');
+                    return;
+                }
+            }
+            
             const reportItems = [];
 
             for (let i = 1; i <= items.length; i++) {
