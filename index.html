@@ -489,7 +489,7 @@
     </div>
 
     <div class="footer">
-        <p style="margin-bottom: 5px;">تطوير وتصميم: عويض المطيري</p>
+        <p style="margin-bottom: 5px;">تطوير وتصميم: Owaidh Almutairi</p>
         <p style="font-size: 11px; opacity: 0.8;">© 2025 جميع الحقوق محفوظة</p>
     </div>
 
@@ -564,7 +564,7 @@
                             <textarea class="form-textarea" id="notes${num}"></textarea>
                         </div>
                         <div class="images-section">
-                            <label class="form-label">📸 الصور المرفقة (حتى 3 صور):</label>
+                            <label class="form-label">📸 الصور المرفقة (حتى 2 صور):</label>
                             <div class="image-upload">
                                 <input type="file" accept="image/*" id="img${num}_1" class="file-upload">
                             </div>
@@ -615,7 +615,17 @@
 
         function saveReport(e) {
             e.preventDefault();
-            
+            // التحقق من أن كل البنود تم اختيارها
+const location = document.getElementById('selectedLocation').value;
+const items = location === 'inside' ? itemsInside : itemsOutside;
+
+for (let i = 1; i <= items.length; i++) {
+    const checked = document.querySelector(input[name="item${i}"]:checked);
+    if (!checked) {
+        alert('⚠️ يرجى الإجابة على جميع البنود! \nالبند رقم ' + i + ' لم يتم اختياره.');
+        return;
+    }
+}
             const location = document.getElementById('selectedLocation').value;
             const items = location === 'inside' ? itemsInside : itemsOutside;
             const reportItems = [];
@@ -1006,4 +1016,5 @@
     </script>
 </body>
 </html>
+
 
