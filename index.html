@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقارير اليومية - وزارة الصحة</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e5a3e 0%, #2d7a54 100%);
+            min-height: 100vh;
+            padding: 15px;
+        }
+        
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .login-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1e5a3e;
+            margin-bottom: 30px;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #1e5a3e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background: #15472f;
+        }
+        
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .container.active {
+            display: block;
+        }
+        
+        .header {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 8px 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .user-info {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 8px 15px;
+            background: #e8f5e9;
+            color: #1e5a3e;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        
+        .main-title {
+            font-size: 26px;
+            font-weight: bold;
+            color: #1e5a3e;
+            margin-bottom: 8px;
+        }
+
+        .sub-title {
+            font-size: 16px;
+            color: #2d7a54;
+            font-weight: 600;
+            margin: 5px 0;
+        }
+
+        .dept-title {
+            font-size: 14px;
+            color: #666;
+            margin: 3px 0;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px;
+            background: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .tab.active {
+            background: #1e5a3e;
+            color: white;
+        }
+        
+        .content-area {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+        }
+        
+        .content-area.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: bold;
+            color: #1e5a3e;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-input:disabled {
+            background: #f0f0f0;
+        }
+        
+        .form-textarea {
+            min-height: 60px;
+            resize: vertical;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .location-selector {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .location-btn {
+            flex: 1;
+            padding: 15px;
+            border: 3px solid #1e5a3e;
+            background: white;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #1e5a3e;
+            cursor: pointer;
+        }
+
+        .location-btn.active {
+            background: #1e5a3e;
+            color: white;
+        }
+        
+        .item-box {
+            border: 2px solid #1e5a3e;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f9fdf9;
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .item-num {
+            background: #1e5a3e;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .item-title {
+            flex: 1;
+            font-weight: 600;
+            color: #1e5a3e;
+            font-size: 14px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        
+        .checkbox-label input {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: #1e5a3e;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .report-card {
+            background: #f9fdf9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-right: 4px solid #1e5a3e;
+            cursor: pointer;
+        }
+        
+        .report-card:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .report-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1e5a3e;
+            margin-bottom: 5px;
+        }
+        
+        .report-info {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .location-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #e8f5e9;
+            color: #1e5a3e;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .status-open {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-closed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-expired {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .wo-action-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .wo-btn-create {
+            background: #1e5a3e;
+            color: white;
+        }
+
+        .wo-btn-close {
+            background: #28a745;
+            color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .success-msg {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .section-title {
+            color: #1e5a3e;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e8f5e9;
+        }
+
+        .images-section {
+            margin-top: 15px;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .file-upload {
+            border: 2px dashed #1e5a3e;
+            border-radius: 6px;
+            padding: 8px;
+            font-size: 13px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+
+        .log-entry {
+            background: #f9fdf9;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border-right: 3px solid #1e5a3e;
+        }
+
+        .log-time {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .log-action {
+            font-weight: bold;
+            color: #1e5a3e;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="loginScreen">
+        <div class="login-title">🔐 تسجيل الدخول</div>
+        <div style="text-align:center;margin-bottom:20px;">
+            <div style="font-size:14px;color:#1e5a3e;font-weight:bold;">فرع وزارة الصحة بحفر الباطن</div>
+        </div>
+        <input type="password" class="login-input" id="passwordInput" placeholder="🔑 كلمة السر">
+        <input type="text" class="login-input" id="usernameInput" placeholder="👤 اسمك الكامل">
+        <button class="login-btn" onclick="login()">دخول</button>
+        <div style="margin-top:20px;font-size:12px;color:#666;">
+            كلمة السر الافتراضية: <strong>MOH2025</strong>
+        </div>
+    </div>
+
+    <div class="container" id="mainSystem">
+        <div class="header">
+            <button class="logout-btn" onclick="logout()">🚪 خروج</button>
+            <div class="user-info">👤 <span id="currentUser"></span></div>
+            <div class="main-title">📋 التقارير اليومية</div>
+            <div class="sub-title">فرع وزارة الصحة بحفر الباطن</div>
+            <div class="dept-title">إدارة الخدمات المساندة - الإدارة المساعدة للدعم المساند</div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showPage('new')">📝 تقرير</button>
+            <button class="tab" onclick="showPage('list')">📊 التقارير</button>
+            <button class="tab" onclick="showPage('workorders')">🔧 أوامر العمل</button>
+            <button class="tab" onclick="showPage('logs')">📜 السجل</button>
+            <button class="tab" onclick="showPage('settings')">⚙️ إعدادات</button>
+        </div>
+        
+        <div class="content-area active" id="page-new">
+            <h3 class="section-title">تقرير يومي جديد</h3>
+            
+            <div id="successMsg" class="success-msg" style="display: none;">
+                ✅ تم حفظ التقرير بنجاح!
+            </div>
+
+            <form id="reportForm" onsubmit="saveReport(event)">
+                <div class="form-group">
+                    <label class="form-label">التاريخ</label>
+                    <input type="date" class="form-input" id="date" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">القائمون بالجولة *</label>
+                    <div class="form-grid">
+                        <input type="text" class="form-input" id="person1" placeholder="الشخص الأول" required>
+                        <input type="text" class="form-input" id="person2" placeholder="الشخص الثاني" required>
+                        <input type="text" class="form-input" id="person3" placeholder="الشخص الثالث" required>
+                    </div>
+                </div>
+
+                <div class="location-selector">
+                    <button type="button" class="location-btn active" onclick="selectLocation('inside', event)">
+                        🏢 داخل المبنى
+                    </button>
+                    <button type="button" class="location-btn" onclick="selectLocation('outside', event)">
+                        🌳 خارج المبنى
+                    </button>
+                </div>
+
+                <input type="hidden" id="selectedLocation" value="inside">
+                
+                <h4 class="section-title">بنود التقييم</h4>
+                
+                <div id="itemsContainer"></div>
+                
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">💾 حفظ التقرير</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetForm()">🔄 إعادة</button>
+                </div>
+            </form>
+        </div>
+        
+        <div class="content-area" id="page-list">
+            <h3 class="section-title">📊 التقارير المحفوظة</h3>
+            <div id="reportsList"></div>
+        </div>
+        
+        <div class="content-area" id="page-workorders">
+            <h3 class="section-title">🔧 أوامر العمل</h3>
+            <div id="workOrdersList"></div>
+        </div>
+
+        <div class="content-area" id="page-logs">
+            <h3 class="section-title">📜 سجل العمليات</h3>
+            <div id="logsList"></div>
+        </div>
+
+        <div class="content-area" id="page-settings">
+            <h3 class="section-title">⚙️ الإعدادات</h3>
+            
+            <div class="form-group">
+                <label class="form-label">🔑 تغيير كلمة السر</label>
+                <input type="password" class="form-input" id="newPassword" placeholder="كلمة السر الجديدة">
+                <button class="btn btn-primary" style="margin-top:10px;" onclick="changePassword()">تحديث</button>
+            </div>
+
+            <div class="form-group" style="margin-top:30px;">
+                <label class="form-label">أسماء القائمين بالجولة (افتراضي)</label>
+                <div class="form-grid">
+                    <input type="text" class="form-input" id="defaultPerson1" placeholder="الشخص الأول">
+                    <input type="text" class="form-input" id="defaultPerson2" placeholder="الشخص الثاني">
+                    <input type="text" class="form-input" id="defaultPerson3" placeholder="الشخص الثالث">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">إيميل المقاول</label>
+                <input type="email" class="form-input" id="contractorEmail" placeholder="contractor@company.com">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">إيميل المسؤول (لإغلاق أوامر العمل)</label>
+                <input type="email" class="form-input" id="supervisorEmail" placeholder="supervisor@moh.gov.sa">
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="saveSettings()">💾 حفظ</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>تطوير وتصميم: عويض المطيري © 2025</p>
+    </div>
+
+    <script>
+        const DEFAULT_PASSWORD = 'MOH2025';
+        let currentUser = '';
+
+        const itemsInside = ['نظافة ممرات المبنى','نظافة دورات المياه','نظافة المكاتب والغرف','توفر الأدوات الصحية','نظافة الأثاث والمكاتب','إضاءة المبنى','التكييف','التزام العاملين بالزي','مخارج الطوارئ','لوحات إرشادية','نظافة المصاعد','صيانة الأبواب'];
+        const itemsOutside = ['نظافة المداخل الخارجية','نظافة مواقف السيارات','نظافة الحدائق','إضاءة المواقف','اللوحات الإرشادية','نظافة الممرات الخارجية','صيانة الأرصفة','صناديق القمامة','السور الخارجي','البوابات'];
+
+        window.onload = async function() {
+            const loggedIn = sessionStorage.getItem('moh_loggedIn');
+            const username = sessionStorage.getItem('moh_username');
+            
+            if (loggedIn === 'true' && username) {
+                currentUser = username;
+                document.getElementById('currentUser').textContent = currentUser;
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainSystem').classList.add('active');
+                setTodayDate();
+                await loadSettings();
+                createItems('inside');
+                setupCheckboxes();
+            }
+        };
+
+        async function login() {
+            const password = document.getElementById('passwordInput').value;
+            const username = document.getElementById('usernameInput').value.trim();
+
+            if (!username) {
+                alert('⚠️ الرجاء إدخال اسمك');
+                return;
+            }
+
+            const savedPassword = await getStorageData('system_password');
+            const correctPassword = savedPassword || DEFAULT_PASSWORD;
+
+            if (password !== correctPassword) {
+                alert('❌ كلمة السر غير صحيحة!');
+                await addLog(username, 'محاولة دخول فاشلة');
+                return;
+            }
+
+            currentUser = username;
+            sessionStorage.setItem('moh_loggedIn', 'true');
+            sessionStorage.setItem('moh_username', username);
+            
+            document.getElementById('currentUser').textContent = currentUser;
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainSystem').classList.add('active');
+            
+            await addLog(username, 'تسجيل دخول');
+            
+            setTodayDate();
+            await loadSettings();
+            createItems('inside');
+            setupCheckboxes();
+        }
+
+        function logout() {
+            addLog(currentUser, 'تسجيل خروج');
+            sessionStorage.clear();
+            location.reload();
+        }
+
+        async function changePassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            
+            if (!newPassword || newPassword.length < 4) {
+                alert('⚠️ كلمة السر يجب أن تكون 4 أحرف على الأقل');
+                return;
+            }
+
+            await saveStorageData('system_password', newPassword);
+            await addLog(currentUser, 'تغيير كلمة السر');
+            
+            alert('✅ تم تغيير كلمة السر');
+            document.getElementById('newPassword').value = '';
+        }
+
+        async function getStorageData(key) {
+            try {
+                const result = await window.storage.get(key, true);
+                return result ? JSON.parse(result.value) : null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        async function saveStorageData(key, value) {
+            try {
+                await window.storage.set(key, JSON.stringify(value), true);
+                return true;
+            } catch (e) {
+                console.error('خطأ في الحفظ:', e);
+                return false;
+            }
+        }
+
+        async function addLog(user, action) {
+            try {
+                const logs = await getStorageData('activity_logs') || [];
+                logs.unshift({
+                    user: user,
+                    action: action,
+                    timestamp: new Date().toISOString()
+                });
+                
+                if (logs.length > 100) logs.length = 100;
+                
+                await saveStorageData('activity_logs', logs);
+            } catch (e) {
+                console.error('خطأ:', e);
+            }
+        }
+
+        function selectLocation(location, event) {
+            event.preventDefault();
+            document.querySelectorAll('.location-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('selectedLocation').value = location;
+            createItems(location);
+            setupCheckboxes();
+        }
+
+        function createItems(location) {
+            const container = document.getElementById('itemsContainer');
+            const items = location === 'inside' ? itemsInside : itemsOutside;
+            let html = '';
+            
+            items.forEach((item, i) => {
+                const num = i + 1;
+                html += '<div class="item-box"><div class="item-header"><div class="item-num">' + num + '</div><div class="item-title">' + item + '</div><div class="checkbox-group"><label class="checkbox-label"><input type="checkbox" name="item' + num + '" value="yes"> نعم</label><label class="checkbox-label"><input type="checkbox" name="item' + num + '" value="no"> لا</label></div></div><div class="form-group"><label class="form-label">الملاحظات:</label><textarea class="form-textarea" id="notes' + num + '"></textarea></div><div class="images-section"><label class="form-label">📸 الصور (حتى 3):</label><input type="file" accept="image/*" id="img' + num + '_1" class="file-upload"><input type="file" accept="image/*" id="img' + num + '_2" class="file-upload"><input type="file" accept="image/*" id="img' + num + '_3" class="file-upload"></div></div>';
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function setupCheckboxes() {
+            setTimeout(() => {
+                const location = document.getElementById('selectedLocation').value;
+                const itemsCount = location === 'inside' ? itemsInside.length : itemsOutside.length;
+                
+                for (let i = 1; i <= itemsCount; i++) {
+                    const boxes = document.querySelectorAll('input[name="item' + i + '"]');
+                    boxes.forEach(box => {
+                        box.addEventListener('change', function() {
+                            if (this.checked) {
+                                boxes.forEach(b => {
+                                    if (b !== this) b.checked = false;
+                                });
+                            }
+                        });
+                    });
+                }
+            }, 100);
+        }
+
+        function showPage(page) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.content-area').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById('page-' + page).classList.add('active');
+            
+            if (page === 'list') loadReports();
+            if (page === 'workorders') loadWorkOrders();
+            if (page === 'logs') loadLogs();
+        }
+
+        async function saveReport(e) {
+            e.preventDefault();
+            
+            const location = document.getElementById('selectedLocation').value;
+            const items = location === 'inside' ? itemsInside : itemsOutside;
+            
+            for (let i = 1; i <= items.length; i++) {
+                const checked = document.querySelector('input[name="item' + i + '"]:checked');
+                if (!checked) {
+                    alert('⚠️ يرجى الإجابة على جميع البنود!\nالبند رقم ' + i + ' لم يتم اختياره.');
+                    return;
+                }
+            }
+            
+            const reportItems = [];
+
+            for (let i = 1; i <= items.length; i++) {
+                const checked = document.querySelector('input[name="item' + i + '"]:checked');
+                
+                const item = {
+                    number: i,
+                    title: items[i-1],
+                    result: checked ? (checked.value === 'yes' ? '✓ نعم' : '✗ لا') : 'غير محدد',
+                    notes: document.getElementById('notes' + i).value,
+                    images: []
+                };
+                
+                for (let j = 1; j <= 3; j++) {
+                    const imgInput = document.getElementById('img' + i + '_' + j);
+                    if (imgInput && imgInput.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            item.images.push(event.target.result);
+                        };
+                        reader.readAsDataURL(imgInput.files[0]);
+                    }
+                }
+                
+                reportItems.push(item);
+            }
+
+            const report = {
+                id: Date.now(),
+                date: document.getElementById('date').value,
+                person1: document.getElementById('person1').value,
+                person2: document.getElementById('person2').value,
+                person3: document.getElementById('person3').value,
+                location: location,
+                locationText: location === 'inside' ? 'داخل المبنى' : 'خارج المبنى',
+                items: reportItems,
+                createdAt: new Date().toISOString(),
+                createdBy: currentUser
+            };
+
+            setTimeout(async () => {
+                let reports = await getStorageData('moh_reports') || [];
+                reports.unshift(report);
+                await saveStorageData('moh_reports', reports);
+                
+                await addLog(currentUser, 'حفظ تقرير - ' + report.date);
+
+                document.getElementById('successMsg').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('successMsg').style.display = 'none';
+                    resetForm();
+                    showPageDirect('list');
+                }, 2000);
+            }, 500);
+        }
+
+        function showPageDirect(page) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.content-area').forEach(c => c.classList.remove('active'));
+            
+            const tabs = document.querySelectorAll('.tab');
+            const pages = ['new', 'list', 'workorders', 'logs', 'settings'];
+            const index = pages.indexOf(page);
+            if (index >= 0 && tabs[index]) tabs[index].classList.add('active');
+            
+            document.getElementById('page-' + page).classList.add('active');
+            
+            if (page === 'list') loadReports();
+            if (page === 'workorders') loadWorkOrders();
+            if (page === 'logs') loadLogs();
+        }
+
+        function resetForm() {
+            document.getElementById('reportForm').reset();
+            setTodayDate();
+            loadSettings();
+            selectLocationDirect('inside');
+        }
+
+        function selectLocationDirect(location) {
+            document.querySelectorAll('.location-btn').forEach(btn => btn.classList.remove('active'));
+            const btns = document.querySelectorAll('.location-btn');
+            if (location === 'inside' && btns[0]) btns[0].classList.add('active');
+            else if (btns[1]) btns[1].classList.add('active');
+            document.getElementById('selectedLocation').value = location;
+            createItems(location);
+            setupCheckboxes();
+        }
+
+        async function loadReports() {
+            const list = document.getElementById('reportsList');
+            const reports = await getStorageData('moh_reports') || [];
+
+            if (reports.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div style="font-size:40px;">📋</div><p>لا توجد تقارير</p></div>';
+                return;
+            }
+
+            let html = '';
+            reports.forEach((r, i) => {
+                html += '<div class="report-card" onclick="viewReport(' + i + ')"><div class="report-title">📄 تقرير ' + r.date + '</div><div class="report-info">👥 ' + r.person1 + ', ' + r.person2 + ', ' + r.person3 + '</div><div class="location-badge">' + r.locationText + '</div><div style="margin-top:5px;font-size:11px;color:#666;">✍️ ' + (r.createdBy || 'غير محدد') + '</div></div>';
+            });
+
+            list.innerHTML = html;
+        }
+
+        async function viewReport(index) {
+            const reports = await getStorageData('moh_reports') || [];
+            const r = reports[index];
+            
+            let html = '<h3 class="section-title">📄 تفاصيل التقرير</h3><div style="background:#f9fdf9;padding:15px;border-radius:8px;margin-bottom:15px;"><p><strong>التاريخ:</strong> ' + r.date + '</p><p><strong>الموقع:</strong> ' + r.locationText + '</p><p><strong>القائمون:</strong> ' + r.person1 + ', ' + r.person2 + ', ' + r.person3 + '</p><p style="margin-top:10px;color:#666;"><strong>✍️ بواسطة:</strong> ' + (r.createdBy || 'غير محدد') + '</p></div><h4 class="section-title">النتائج</h4>';
+
+            r.items.forEach(item => {
+                const color = item.result.includes('نعم') ? '#155724' : item.result.includes('لا') ? '#721c24' : '#666';
+                const showBtn = item.result.includes('لا');
+                
+                html += '<div class="item-box"><div class="item-header"><div class="item-num">' + item.number + '</div><div class="item-title">' + item.title + '</div><div style="font-weight:bold;color:' + color + ';">' + item.result + '</div></div>';
+                
+                if (item.notes) html += '<div style="background:white;padding:10px;border-radius:6px;margin-top:8px;"><strong>ملاحظات:</strong> ' + item.notes + '</div>';
+                
+                if (item.images && item.images.length > 0) {
+                    html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:10px;">';
+                    item.images.forEach(img => {
+                        html += '<img src="' + img + '" style="width:100%;border-radius:8px;border:2px solid #1e5a3e;">';
+                    });
+                    html += '</div>';
+                }
+                
+                if (showBtn) html += '<div style="margin-top:10px;"><button class="wo-action-btn wo-btn-create" onclick="createWorkOrder(' + index + ', ' + item.number + ')">🔧 إنشاء أمر عمل</button></div>';
+                
+                html += '</div>';
+            });
+
+            html += '<div class="button-group"><button class="btn btn-secondary" onclick="loadReports()">↩️ رجوع</button><button class="btn btn-primary" onclick="printReport(' + index + ')">🖨️ طباعة</button></div>';
+
+            document.getElementById('reportsList').innerHTML = html;
+        }
+
+        async function createWorkOrder(reportIndex, itemNumber) {
+            const reports = await getStorageData('moh_reports') || [];
+            const report = reports[reportIndex];
+            const item = report.items.find(i => i.number === itemNumber);
+            
+            const settings = await getStorageData('moh_settings') || {};
+            const contractorEmail = settings.contractorEmail;
+            
+            if (!contractorEmail) {
+                alert('⚠️ الرجاء إدخال إيميل المقاول في الإعدادات');
+                showPageDirect('settings');
+                return;
+            }
+
+            const workOrder = {
+                id: Date.now(),
+                reportId: report.id,
+                reportDate: report.date,
+                itemNumber: itemNumber,
+                itemTitle: item.title,
+                location: report.locationText,
+                notes: item.notes,
+                images: item.images || [],
+                createdAt: new Date().toISOString(),
+                deadline: new Date(Date.now() + 72 * 60 * 60 * 1000).toISOString(),
+                status: 'open',
+                createdBy: currentUser
+            };
+
+            let workOrders = await getStorageData('moh_workorders') || [];
+            workOrders.unshift(workOrder);
+            await saveStorageData('moh_workorders', workOrders);
+
+            await addLog(currentUser, 'إنشاء أمر عمل #' + workOrder.id);
+
+            const deadlineDate = new Date(workOrder.deadline);
+            const details = 'أمر عمل رقم: ' + workOrder.id + '\n\n📋 التفاصيل:\n━━━━━━━━━━━━━━━━\n📅 التاريخ: ' + report.date + '\n📍 الموقع: ' + report.locationText + '\n🔧 البند: ' + item.title + '\n📝 الملاحظات: ' + (item.notes || 'لا توجد') + '\n\n⏰ مدة التنفيذ: 72 ساعة\n📆 الانتهاء: ' + deadlineDate.toLocaleString('ar-SA') + '\n\n━━━━━━━━━━━━━━━━\nإيميل المقاول: ' + contractorEmail;
+
+            try {
+                await navigator.clipboard.writeText(details);
+                alert('✅ تم إنشاء أمر العمل ونسخ التفاصيل!');
+            } catch (e) {
+                alert('✅ تم إنشاء أمر العمل!\nإيميل: ' + contractorEmail);
+            }
+            
+            showPageDirect('workorders');
+        }
+
+        async function loadWorkOrders() {
+            const list = document.getElementById('workOrdersList');
+            const workOrders = await getStorageData('moh_workorders') || [];
+
+            if (workOrders.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div style="font-size:40px;">🔧</div><p>لا توجد أوامر عمل</p></div>';
+                return;
+            }
+
+            let html = '';
+            const now = new Date();
+
+            workOrders.forEach((wo, i) => {
+                const deadline = new Date(wo.deadline);
+                const isExpired = now > deadline && wo.status === 'open';
+                const hoursLeft = Math.max(0, Math.round((deadline - now) / (1000 * 60 * 60)));
+                
+                let badge = '';
+                if (wo.status === 'closed') badge = '<span class="status-badge status-closed">✓ مغلق</span>';
+                else if (isExpired) badge = '<span class="status-badge status-expired">⚠️ منتهي</span>';
+                else badge = '<span class="status-badge status-open">⏱️ متبقي ' + hoursLeft + ' ساعة</span>';
+
+                html += '<div class="report-card" onclick="viewWorkOrder(' + i + ')"><div class="report-title">🔧 أمر #' + wo.id + '</div><div class="report-info">📍 ' + wo.itemTitle + '<br>📅 ' + wo.reportDate + '<br>👤 ' + wo.createdBy + '</div>' + badge;
+                
+                if (wo.closedBy) html += '<div style="margin-top:5px;font-size:12px;color:#155724;">✓ ' + wo.closedBy + '</div>';
+                
+                html += '</div>';
+            });
+
+            list.innerHTML = html;
+        }
+
+        async function viewWorkOrder(index) {
+            const workOrders = await getStorageData('moh_workorders') || [];
+            const wo = workOrders[index];
+            const settings = await getStorageData('moh_settings') || {};
+            const supervisorEmail = settings.supervisorEmail || '';
+            
+            const deadline = new Date(wo.deadline);
+            const now = new Date();
+            const isExpired = now > deadline && wo.status === 'open';
+            const hoursLeft = Math.max(0, Math.round((deadline - now) / (1000 * 60 * 60)));
+
+            let html = '<h3 class="section-title">🔧 أمر عمل #' + wo.id + '</h3><div style="background:#f9fdf9;padding:15px;border-radius:8px;margin-bottom:15px;"><p><strong>📍 البند:</strong> ' + wo.itemTitle + '</p><p><strong>📅 التاريخ:</strong> ' + wo.reportDate + '</p><p><strong>🏢 الموقع:</strong> ' + wo.location + '</p><p><strong>👤 بواسطة:</strong> ' + wo.createdBy + '</p><p><strong>⏰ المدة:</strong> 72 ساعة</p><p><strong>📆 الانتهاء:</strong> ' + deadline.toLocaleString('ar-SA') + '</p>';
+            
+            if (wo.notes) html += '<p><strong>📝 ملاحظات:</strong> ' + wo.notes + '</p>';
+            
+            html += '<p><strong>🔔 الحالة:</strong> ' + (wo.status === 'closed' ? '✓ مغلق' : isExpired ? '⚠️ منتهي' : '⏱️ متبقي ' + hoursLeft + ' ساعة') + '</p>';
+            
+            if (wo.closedBy) html += '<p><strong>✓ أغلق بواسطة:</strong> ' + wo.closedBy + ' - ' + new Date(wo.closedAt).toLocaleString('ar-SA') + '</p>';
+            
+            html += '</div>';
+
+            if (wo.images && wo.images.length > 0) {
+                html += '<h4 class="section-title">📸 الصور</h4><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:20px;">';
+                wo.images.forEach(img => {
+                    html += '<img src="' + img + '" style="width:100%;border-radius:8px;border:3px solid #1e5a3e;">';
+                });
+                html += '</div>';
+            }
+
+            html += '<div class="button-group"><button class="btn btn-secondary" onclick="loadWorkOrders()">↩️ رجوع</button>';
+            
+            if (wo.status === 'open') {
+                html += '<button class="wo-action-btn wo-btn-close" onclick="closeWorkOrder(' + index + ')">✓ إغلاق</button>';
+            }
+            
+            html += '</div>';
+
+            document.getElementById('workOrdersList').innerHTML = html;
+        }
+
+        async function closeWorkOrder(index) {
+            const settings = await getStorageData('moh_settings') || {};
+            const supervisorEmail = settings.supervisorEmail;
+            
+            if (!supervisorEmail) {
+                alert('⚠️ الرجاء إدخال إيميل المسؤول في الإعدادات');
+                showPageDirect('settings');
+                return;
+            }
+
+            const enteredEmail = prompt('🔐 للتأكيد، أدخل إيميل المسؤول:');
+            
+            if (!enteredEmail) return;
+
+            if (enteredEmail.toLowerCase().trim() !== supervisorEmail.toLowerCase().trim()) {
+                alert('❌ الإيميل غير صحيح');
+                return;
+            }
+
+            let workOrders = await getStorageData('moh_workorders') || [];
+            workOrders[index].status = 'closed';
+            workOrders[index].closedAt = new Date().toISOString();
+            workOrders[index].closedBy = currentUser;
+            
+            await saveStorageData('moh_workorders', workOrders);
+            await addLog(currentUser, 'إغلاق أمر #' + workOrders[index].id);
+            
+            alert('✅ تم إغلاق أمر العمل');
+            loadWorkOrders();
+        }
+
+        async function loadLogs() {
+            const list = document.getElementById('logsList');
+            const logs = await getStorageData('activity_logs') || [];
+
+            if (logs.length === 0) {
+                list.innerHTML = '<div class="empty-state"><div style="font-size:40px;">📜</div><p>لا توجد سجلات</p></div>';
+                return;
+            }
+
+            let html = '';
+            logs.forEach(log => {
+                const date = new Date(log.timestamp);
+                html += '<div class="log-entry"><div class="log-time">🕐 ' + date.toLocaleString('ar-SA') + '</div><div class="log-action">👤 ' + log.user + ': ' + log.action + '</div></div>';
+            });
+
+            list.innerHTML = html;
+        }
+
+        async function printReport(index) {
+            const reports = await getStorageData('moh_reports') || [];
+            const r = reports[index];
+            
+            let content = '<!DOCTYPE html><html dir="rtl"><head><meta charset="UTF-8"><title>تقرير ' + r.date + '</title><style>body{font-family:Arial;padding:20px}h1,h2{color:#1e5a3e;text-align:center}table{width:100%;border-collapse:collapse;margin:20px 0}td{padding:8px;border:1px solid #ddd}.item{margin:10px 0;padding:10px;border:1px solid #1e5a3e}</style></head><body><h1>التقارير اليومية</h1><h2>فرع وزارة الصحة بحفر الباطن</h2><p style="text-align:center">إدارة الخدمات المساندة - الإدارة المساعدة للدعم المساند</p><table><tr><td><strong>التاريخ:</strong></td><td>' + r.date + '</td></tr><tr><td><strong>الموقع:</strong></td><td>' + r.locationText + '</td></tr><tr><td><strong>القائمون:</strong></td><td>' + r.person1 + ', ' + r.person2 + ', ' + r.person3 + '</td></tr></table><h3>النتائج:</h3>';
+
+            r.items.forEach(item => {
+                content += '<div class="item"><strong>' + item.number + '. ' + item.title + '</strong><br>النتيجة: ' + item.result + (item.notes ? '<br>ملاحظات: ' + item.notes : '') + '</div>';
+            });
+
+            content += '</body></html>';
+
+            const w = window.open('', '', 'height=600,width=800');
+            w.document.write(content);
+            w.document.close();
+            w.print();
+        }
+
+        async function saveSettings() {
+            const settings = {
+                defaultPerson1: document.getElementById('defaultPerson1').value,
+                defaultPerson2: document.getElementById('defaultPerson2').value,
+                defaultPerson3: document.getElementById('defaultPerson3').value,
+                contractorEmail: document.getElementById('contractorEmail').value,
+                supervisorEmail: document.getElementById('supervisorEmail').value
+            };
+
+            await saveStorageData('moh_settings', settings);
+            await addLog(currentUser, 'تحديث الإعدادات');
+            
+            alert('✅ تم حفظ الإعدادات');
+            await loadSettings();
+        }
+
+        async function loadSettings() {
+            const settings = await getStorageData('moh_settings') || {};
+            
+            document.getElementById('defaultPerson1').value = settings.defaultPerson1 || '';
+            document.getElementById('defaultPerson2').value = settings.defaultPerson2 || '';
+            document.getElementById('defaultPerson3').value = settings.defaultPerson3 || '';
+            document.getElementById('contractorEmail').value = settings.contractorEmail || '';
+            document.getElementById('supervisorEmail').value = settings.supervisorEmail || '';
+            
+            document.getElementById('person1').value = settings.defaultPerson1 || '';
+            document.getElementById('person2').value = settings.defaultPerson2 || '';
+            document.getElementById('person3').value = settings.defaultPerson3 || '';
+        }
+
+        function setTodayDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('date').value = today;
+        }
+    </script>
+</body>
+</html>
